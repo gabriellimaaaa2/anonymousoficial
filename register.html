@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta - AnonymousApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>🎭 AnonymousApp</h1>
+                <h2>Criar Nova Conta</h2>
+                <p>Junte-se à comunidade de mensagens anônimas</p>
+            </div>
+
+            <form class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="username">Nome de Usuário</label>
+                    <input type="text" id="username" name="username" required 
+                           placeholder="Escolha um nome único">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required 
+                           placeholder="seu@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required 
+                           placeholder="Mínimo 6 caracteres">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Senha</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required 
+                           placeholder="Digite a senha novamente">
+                </div>
+
+                <div class="warning-box">
+                    <p><strong>⚠️ IMPORTANTE:</strong> Não há recuperação de conta. Memorize sua senha!</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    ✨ Criar Conta
+                </button>
+
+                <div class="auth-links">
+                    <p>Já tem uma conta? <a href="login.html">Fazer Login</a></p>
+                    <p><a href="index.html">← Voltar ao início</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <h3 id="popup-title">Sucesso!</h3>
+            <p id="popup-message">Conta criada com sucesso!</p>
+            <button class="btn btn-primary" onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

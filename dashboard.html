@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AnonymousApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <div class="user-info">
+                <h1>🎭 Olá, <span id="username">Usuário</span>!</h1>
+                <p>Suas mensagens anônimas</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="copyLink()">📋 Copiar Link</button>
+                <button class="btn btn-outline" onclick="logout()">🚪 Sair</button>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Link personalizado -->
+            <div class="link-section">
+                <h3>Seu Link Personalizado</h3>
+                <div class="link-box">
+                    <input type="text" id="personalLink" readonly 
+                           value="https://anonymousapp.com/u/usuario" 
+                           onclick="this.select()">
+                    <button class="btn btn-primary" onclick="copyLink()">Copiar</button>
+                </div>
+                <p>Compartilhe este link para receber mensagens anônimas!</p>
+            </div>
+
+            <!-- Configuração BSPay (apenas para admin) -->
+            <div class="admin-section" id="adminSection" style="display: none;">
+                <h3>⚙️ Configuração BSPay (Admin)</h3>
+                <div class="bspay-config">
+                    <div class="form-group">
+                        <label>Client ID:</label>
+                        <input type="text" id="bspayClientId" value="Gabriellima02_8489541538893349" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Client Secret:</label>
+                        <input type="password" id="bspaySecret" value="3e6dbd4930f68f1e3d2b434017419ab49ee4a8aff0ecc24777459d8c91549144" readonly>
+                    </div>
+                    <button class="btn btn-primary" onclick="testBSPay()">Testar Conexão</button>
+                </div>
+            </div>
+
+            <!-- Mensagens recebidas -->
+            <div class="messages-section">
+                <h3>📬 Mensagens Recebidas</h3>
+                <div id="messagesContainer" class="messages-container">
+                    <!-- Mensagens serão carregadas aqui -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Pistas -->
+    <div id="pistasModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔍 Pista da Mensagem</h3>
+                <button class="close-btn" onclick="closePistasModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="pista-content">
+                    <p id="pistaText">Esta pessoa provavelmente te conhece do trabalho...</p>
+                </div>
+                <div class="disclaimer">
+                    <p><strong>⚠️ Disclaimer:</strong> As pistas são baseadas em análise de padrões e podem não ser 100% precisas.</p>
+                </div>
+                <div class="payment-options">
+                    <h4>💳 Desbloquear Pista - R$ 2,99</h4>
+                    <button class="btn btn-primary" onclick="payWithPix()">PIX</button>
+                    <button class="btn btn-secondary" onclick="payWithCard()">Cartão</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup de notificações -->
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <h3 id="popup-title">Notificação</h3>
+            <p id="popup-message">Mensagem</p>
+            <button class="btn btn-primary" onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="messages.js"></script>
+    <script src="payment.js"></script>
+    <script src="pistas.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AnonymousApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>🎭 AnonymousApp</h1>
+                <h2>Fazer Login</h2>
+                <p>Acesse sua conta e veja suas mensagens</p>
+            </div>
+
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername">Nome de Usuário ou Email</label>
+                    <input type="text" id="loginUsername" name="loginUsername" required 
+                           placeholder="Digite seu usuário ou email">
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" name="loginPassword" required 
+                           placeholder="Digite sua senha">
+                </div>
+
+                <div class="warning-box">
+                    <p><strong>⚠️ LEMBRETE:</strong> Sem recuperação de conta - memorize sua senha!</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    🔐 Entrar
+                </button>
+
+                <div class="auth-links">
+                    <p>Não tem conta? <a href="register.html">Criar Conta</a></p>
+                    <p><a href="index.html">← Voltar ao início</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <h3 id="popup-title">Erro</h3>
+            <p id="popup-message">Usuário ou senha incorretos!</p>
+            <button class="btn btn-primary" onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>
