@@ -74,8 +74,8 @@
                 </div>
                 <div class="payment-options">
                     <h4>💳 Desbloquear Pista - R$ 2,99</h4>
-                    <button class="btn btn-primary" onclick="payWithPix()">PIX</button>
-                    <button class="btn btn-secondary" onclick="payWithCard()">Cartão</button>
+                    <button class="btn btn-primary" id="pixButton">PIX</button>
+                    <button class="btn btn-secondary" id="cardButton">Cartão</button>
                 </div>
             </div>
         </div>
@@ -94,5 +94,37 @@
     <script src="messages.js"></script>
     <script src="payment.js"></script>
     <script src="pistas.js"></script>
+
+    <script>
+        let currentMessageId = null;
+
+        // Abrir modal de pista com ID da mensagem
+        function openPistasModal(messageId, pistaText) {
+            currentMessageId = messageId;
+            document.getElementById('pistaText').innerText = pistaText;
+            document.getElementById('pistasModal').classList.remove('hidden');
+        }
+
+        function closePistasModal() {
+            document.getElementById('pistasModal').classList.add('hidden');
+        }
+
+        // Conecta os botões PIX e Cartão ao PaymentSystem
+        document.getElementById('pixButton').addEventListener('click', () => {
+            if (!currentMessageId) return alert('Erro: ID da mensagem não encontrado.');
+            PaymentSystem.openPixForMessage({
+                messageId: currentMessageId,
+                amount: 2.99
+            });
+        });
+
+        document.getElementById('cardButton').addEventListener('click', () => {
+            if (!currentMessageId) return alert('Erro: ID da mensagem não encontrado.');
+            PaymentSystem.openCardForMessage({
+                messageId: currentMessageId,
+                amount: 2.99
+            });
+        });
+    </script>
 </body>
 </html>
