@@ -127,7 +127,8 @@ class AuthSystem {
         // Atualizar link personalizado
         const personalLink = document.getElementById('personalLink');
         if (personalLink) {
-            personalLink.value = `https://anonymousapp.com/u/${this.currentUser.username}`;
+            const baseUrl = window.location.origin + window.location.pathname.replace('dashboard.html', '');
+            personalLink.value = `${baseUrl}send.html?u=${this.currentUser.username}`;
         }
 
         // Mostrar seção admin se for o usuário correto
@@ -317,34 +318,70 @@ function testBSPay() {
 // Inicializar sistema de autenticação
 const auth = new AuthSystem();
 
-// Adicionar algumas mensagens de exemplo para demonstração
-if (auth.currentUser && auth.currentUser.messages.length === 0) {
-    const exampleMessages = [
-        {
-            id: 'msg1',
-            content: 'Você é uma pessoa incrível! Continue sendo assim! 😊',
-            timestamp: Date.now() - 86400000, // 1 dia atrás
-        },
-        {
-            id: 'msg2',
-            content: 'Admiro muito sua dedicação no trabalho. Você inspira todos ao seu redor!',
-            timestamp: Date.now() - 172800000, // 2 dias atrás
-        },
-        {
-            id: 'msg3',
-            content: 'Seu sorriso ilumina o dia de qualquer pessoa. Obrigado por existir!',
-            timestamp: Date.now() - 259200000, // 3 dias atrás
-        }
-    ];
-
-    // Adicionar mensagens apenas se o usuário não tiver nenhuma
-    auth.currentUser.messages = exampleMessages;
+// Criar usuários de exemplo para demonstração
+function createExampleUsers() {
+    const existingUsers = JSON.parse(localStorage.getItem('anonymousapp_users') || '[]');
     
-    // Atualizar no localStorage
-    const userIndex = auth.users.findIndex(u => u.id === auth.currentUser.id);
-    if (userIndex !== -1) {
-        auth.users[userIndex] = auth.currentUser;
-        localStorage.setItem('anonymousapp_users', JSON.stringify(auth.users));
-        localStorage.setItem('anonymousapp_current_user', JSON.stringify(auth.currentUser));
+    // Verificar se já existem usuários de exemplo
+    if (existingUsers.length === 0) {
+        const exampleUsers = [
+            {
+                id: 'user1',
+                username: 'joao',
+                email: 'joao@example.com',
+                password: auth.hashPassword('123456'),
+                createdAt: new Date().toISOString(),
+                messages: [
+                    {
+                        id: 'msg1',
+                        content: 'João, você é um cara muito legal! Admiro sua personalidade.',
+                        timestamp: Date.now() - 86400000
+                    },
+                    {
+                        id: 'msg2',
+                        content: 'Parabéns pelo seu trabalho incrível! Você inspira muita gente.',
+                        timestamp: Date.now() - 172800000
+                    }
+                ]
+            },
+            {
+                id: 'user2',
+                username: 'marcos',
+                email: 'marcos@example.com',
+                password: auth.hashPassword('123456'),
+                createdAt: new Date().toISOString(),
+                messages: [
+                    {
+                        id: 'msg3',
+                        content: 'Marcos, seu senso de humor é fantástico! Sempre me faz rir.',
+                        timestamp: Date.now() - 259200000
+                    }
+                ]
+            },
+            {
+                id: 'user3',
+                username: 'felipe',
+                email: 'felipe@example.com',
+                password: auth.hashPassword('123456'),
+                createdAt: new Date().toISOString(),
+                messages: [
+                    {
+                        id: 'msg4',
+                        content: 'Felipe, você é uma pessoa muito especial! Continue sendo assim.',
+                        timestamp: Date.now() - 345600000
+                    },
+                    {
+                        id: 'msg5',
+                        content: 'Admiro muito sua dedicação e esforço em tudo que faz!',
+                        timestamp: Date.now() - 432000000
+                    }
+                ]
+            }
+        ];
+
+        localStorage.setItem('anonymousapp_users', JSON.stringify(exampleUsers));
     }
 }
+
+// Criar usuários de exemplo ao carregar a página
+createExampleUsers();

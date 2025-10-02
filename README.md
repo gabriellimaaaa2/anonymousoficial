@@ -82,10 +82,15 @@ python -m http.server 8000
 1. **Visitante** acessa a landing page
 2. **Registro** → cria conta → redirecionado para login
 3. **Login** → acessa dashboard pessoal
-4. **Compartilha** link personalizado
-5. **Outros** enviam mensagens anônimas via link
+4. **Compartilha** link personalizado (send.html?u=username)
+5. **Outros** acessam o link e enviam mensagens anônimas
 6. **Usuário** vê mensagens no dashboard
 7. **Pistas** podem ser desbloqueadas por R$ 2,99
+
+### Como Funciona o Link Personalizado
+- Cada usuário recebe um link no formato: `send.html?u=nomedousuario`
+- Quando alguém acessa esse link, vai direto para a página de envio
+- A mensagem é enviada diretamente para o usuário especificado no link
 
 ## 🔒 Segurança
 
