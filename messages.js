@@ -1,6 +1,7 @@
 // Sistema de mensagens anônimas
 class MessageSystem {
     constructor() {
+        this.currentMessageId = null; // ID da mensagem atual para pagamento
         this.init();
     }
 
@@ -14,6 +15,7 @@ class MessageSystem {
         }
 
         this.setupEventListeners();
+        this.loadDashboardMessages();
     }
 
     setupEventListeners() {
@@ -82,7 +84,8 @@ class MessageSystem {
             id: Date.now().toString(),
             content: messageContent,
             timestamp: Date.now(),
-            read: false
+            read: false,
+            pista: "Esta pessoa provavelmente te conhece do trabalho..." // exemplo
         };
 
         // Adicionar mensagem ao usuário
@@ -103,11 +106,12 @@ class MessageSystem {
 
         // Mostrar sucesso
         this.showPopup('Sucesso!', 'Mensagem enviada com sucesso!', () => {
-            // Mostrar popup de incentivo após 2 segundos
             setTimeout(() => {
                 this.showIncentivePopup();
             }, 2000);
         });
+
+        this.loadDashboardMessages(); // Atualiza mensagens no dashboard
     }
 
     showIncentivePopup() {
@@ -151,69 +155,57 @@ class MessageSystem {
         }
     }
 
-    // Método para criar página de envio de mensagem dinamicamente
-    createSendPage(username) {
-        return `
-            <!DOCTYPE html>
-            <html lang="pt-BR">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Enviar Mensagem - AnonymousApp</title>
-                <link rel="stylesheet" href="style.css">
-            </head>
-            <body>
-                <div class="container">
-                    <div class="send-container">
-                        <div class="send-header">
-                            <h1>🎭 AnonymousApp</h1>
-                            <h2>Enviar Mensagem Anônima</h2>
-                            <p>Para: <strong id="targetUsername">${username}</strong></p>
-                        </div>
+    loadDashboardMessages() {
+        const messagesContainer = document.getElementById('messagesContainer');
+        if (!messagesContainer) return;
 
-                        <form class="send-form" id="sendMessageForm">
-                            <div class="form-group">
-                                <label for="messageContent">Sua mensagem anônima:</label>
-                                <textarea id="messageContent" name="messageContent" 
-                                         placeholder="Digite sua mensagem aqui... (máximo 500 caracteres)"
-                                         maxlength="500" rows="6" required></textarea>
-                                <div class="char-counter">
-                                    <span id="charCount">0</span>/500 caracteres
-                                </div>
-                            </div>
+        const currentUser = JSON.parse(localStorage.getItem('anonymousapp_users') || '[]')[0]; // exemplo: pegar primeiro usuário
+        if (!currentUser || !currentUser.messages) {
+            messagesContainer.innerHTML = `<p>Nenhuma mensagem recebida ainda.</p>`;
+            return;
+        }
 
-                            <div class="warning-box">
-                                <p><strong>🔒 Sua identidade será mantida em sigilo!</strong></p>
-                                <p>Esta mensagem será enviada de forma completamente anônima.</p>
-                            </div>
+        messagesContainer.innerHTML = '';
+        currentUser.messages.forEach(msg => {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message');
 
-                            <button type="submit" class="btn btn-primary btn-full">
-                                📤 Enviar Mensagem Anônima
-                            </button>
+            const content = document.createElement('p');
+            content.textContent = msg.content;
+            msgDiv.appendChild(content);
 
-                            <div class="send-links">
-                                <p><a href="index.html">← Voltar ao início</a></p>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            const btn = document.createElement('button');
+            btn.textContent = '🔍 Ver Pista';
+            btn.classList.add('btn', 'btn-primary');
+            btn.addEventListener('click', () => {
+                this.openPistasModal(msg.id, msg.pista);
+            });
+            msgDiv.appendChild(btn);
 
-                <div id="popup" class="popup hidden">
-                    <div class="popup-content">
-                        <h3 id="popup-title">Notificação</h3>
-                        <p id="popup-message">Mensagem</p>
-                        <button class="btn btn-primary" onclick="closeMessagePopup()">OK</button>
-                    </div>
-                </div>
+            messagesContainer.appendChild(msgDiv);
+        });
+    }
 
-                <script src="messages.js"></script>
-            </body>
-            </html>
-        `;
+    openPistasModal(messageId, pistaText) {
+        this.currentMessageId = messageId;
+        const modal = document.getElementById('pistasModal');
+        const pistaElement = document.getElementById('pistaText');
+        if (modal && pistaElement) {
+            pistaElement.textContent = pistaText;
+            modal.classList.remove('hidden');
+        }
+    }
+
+    closePistasModal() {
+        const modal = document.getElementById('pistasModal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+        this.currentMessageId = null;
     }
 }
 
-// Funções globais para mensagens
+// Funções globais
 function closeMessagePopup() {
     const popup = document.getElementById('popup');
     if (popup) {
@@ -242,7 +234,6 @@ document.addEventListener('DOMContentLoaded', function() {
         messageContent.addEventListener('input', function() {
             charCount.textContent = this.value.length;
             
-            // Mudar cor quando próximo do limite
             if (this.value.length > 450) {
                 charCount.style.color = '#ff6b6b';
             } else if (this.value.length > 400) {
